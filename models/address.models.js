@@ -46,9 +46,38 @@ const create = async (payload) => {
   }
 }
 
+const update = async (payload, id) => {
+  try {
+    const query = await db`UPDATE address SET ${db(
+      payload,
+      "addressas",
+      "recipientsname",
+      "recipientsphonenumber",
+      "address",
+      "postalcode",
+      "city",
+      "user_id"
+    )} WHERE id = ${id} returning *`
+    return query
+  } catch (error) {
+    return error
+  }
+}
+
+const deleteAddress = async (id) => {
+  try {
+    const query = await db`DELETE FROM address WHERE id = ${id} returning *`
+    return query
+  } catch (error) {
+    return error
+  }
+}
+
 module.exports = {
   getAll,
   getById,
   getByUserId,
   create,
+  update,
+  deleteAddress,
 }

@@ -6,8 +6,7 @@ router.get("/address/user/:userid", addressController.getByUserId)
 router.get("/address/:id", addressController.getById)
 router.get("/address", addressController.getAll)
 router.post("/address", middleware, addressController.create)
-// router.patch("/address/:id", middleware, addressController.update)
-// router.patch("/address/photo", middleware, addressController.updatePhoto)
-// router.delete("/address/:id", middleware, addressController.deleteProducts)
+router.patch("/address/:id", middleware, addressController.update)
+router.delete("/address/:id", middleware, addressController.deleteAddress)
 
 module.exports = router

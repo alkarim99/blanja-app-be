@@ -25,7 +25,7 @@ And of course Blanja App Back-End itself is open source with a [public repositor
 Blanja App Back-End requires [Node.js](https://nodejs.org/) v10+ to run.
 
 ```sh
-cd blanja-be
+cd blanja-app-be
 npm i
 nodemon app
 ```

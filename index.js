@@ -7,6 +7,7 @@ const usersRoutes = require("./routes/users.routes")
 const authRoutes = require("./routes/auth.routes")
 const productsRoutes = require("./routes/products.routes")
 const addressRoutes = require("./routes/address.routes")
+const ordersRoutes = require("./routes/orders.routes")
 const invalidRoutes = require("./routes/404.routes")
 
 const fileUpload = require("express-fileupload")
@@ -28,6 +29,7 @@ app.use(usersRoutes)
 app.use(authRoutes)
 app.use(productsRoutes)
 app.use(addressRoutes)
+app.use(ordersRoutes)
 
 // Home
 app.get("/", (req, res) => {

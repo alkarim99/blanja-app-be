@@ -1,7 +1,6 @@
 const model = require("../models/address.models")
 const db = require("../database")
 const jwt = require("jsonwebtoken")
-const cloudinary = require("../cloudinary")
 
 function getToken(req) {
   const token = req?.headers?.authorization?.slice(
@@ -222,9 +221,132 @@ const create = async (req, res) => {
   }
 }
 
+const update = async (req, res) => {
+  try {
+    jwt.verify(getToken(req), process.env.JWT_PRIVATE_KEY, async (err) => {
+      const {
+        params: { id },
+      } = req
+      const {
+        body: {
+          addressas,
+          recipientsname,
+          recipientsphonenumber,
+          address,
+          postalcode,
+          city,
+          user_id,
+        },
+      } = req
+      let checkData = await model.getById(id)
+      if (!checkData?.length) {
+        res.json({
+          status: false,
+          message: `ID ${id} not found!`,
+        })
+      }
+      const payload = {
+        addressas: addressas ?? checkData[0].addressas,
+        recipientsname: recipientsname ?? checkData[0].recipientsname,
+        recipientsphonenumber:
+          recipientsphonenumber ?? checkData[0].recipientsphonenumber,
+        address: address ?? checkData[0].address,
+        postalcode: postalcode ?? checkData[0].postalcode,
+        city: city ?? checkData[0].city,
+        user_id: user_id ?? checkData[0].user_id,
+      }
+      if (payload.recipientsname.length < 3) {
+        res.status(400).json({
+          status: false,
+          message:
+            "Recipient's Name is invalid! Must be greater than or equal to 3",
+        })
+        return
+      }
+      if (payload.recipientsphonenumber.length < 11) {
+        res.status(400).json({
+          status: false,
+          message:
+            "Recipient's Phone Number is invalid! Must be greater than or equal to 11",
+        })
+        return
+      }
+      if (payload.address.length < 3) {
+        res.status(400).json({
+          status: false,
+          message: "Address is invalid! Must be greater than or equal to 3",
+        })
+        return
+      }
+      if (isNaN(payload.postalcode) || payload.postalcode.length != 5) {
+        res.status(400).send({
+          status: false,
+          message:
+            "Postal Code is invalid! Must be an integer and length equal to 5",
+        })
+      }
+      if (payload.city.length < 3) {
+        res.status(400).json({
+          status: false,
+          message: "City is invalid! Must be greater than or equal to 3",
+        })
+        return
+      }
+      if (isNaN(payload.user_id)) {
+        res.status(400).send({
+          status: false,
+          message: "User ID is Not a Number",
+        })
+      }
+      const query = await model.update(payload, id)
+      res.send({
+        status: true,
+        message: "Success edit data",
+        data: query,
+      })
+    })
+  } catch (error) {
+    console.log(error)
+    res.status(500).send({
+      status: false,
+      message: "Error in server",
+    })
+  }
+}
+
+const deleteAddress = async (req, res) => {
+  try {
+    jwt.verify(getToken(req), process.env.JWT_PRIVATE_KEY, async (err) => {
+      const id = req.params.id
+      const checkData = await model.getById(id)
+      if (!checkData?.length) {
+        res.status(404).json({
+          status: false,
+          message: `ID ${id} not found`,
+        })
+        return
+      }
+      const query = await model.deleteAddress(id)
+      res.send({
+        status: true,
+        message: "Success delete data",
+        data: query,
+      })
+    })
+  } catch (error) {
+    console.log(error)
+    res.status(500).send({
+      status: false,
+      message: "Error in server",
+    })
+  }
+}
+
 module.exports = {
   getAll,
   getById,
   getByUserId,
   create,
+  update,
+  deleteAddress,
 }
