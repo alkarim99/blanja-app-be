@@ -6,6 +6,10 @@ const sql = postgres({
   database: process.env.DB_NAME,
   username: process.env.DB_USER,
   password: process.env.DB_PASS,
+  ssl: {
+    rejectUnauthorized: true,
+    ca: process.env.DB_CA_CERT,
+  },
 }) // will use psql environment variables
 
 module.exports = sql

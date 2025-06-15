@@ -13,11 +13,11 @@ const isEmailUnique = async (email, id) => {
   try {
     let emails
     if (id) {
-      emails = await db`SELECT email FROM users WHERE id != ${id}`
+      emails = await db`SELECT email FROM users_blanja WHERE id != ${id}`
     } else {
-      emails = await db`SELECT email FROM users`
+      emails = await db`SELECT email FROM users_blanja`
     }
-    const isEmailUnique = emails.find((mail) => mail.email === email)
+    const isEmailUnique = emails.find((mail) => mail.email === email) ?? false
     return isEmailUnique
   } catch (error) {
     return error

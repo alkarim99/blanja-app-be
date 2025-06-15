@@ -2,7 +2,7 @@ const db = require("../database")
 
 const getAll = async (sortType) => {
   try {
-    const query = await db`SELECT * FROM users ORDER BY id ${sortType}`
+    const query = await db`SELECT * FROM users_blanja ORDER BY id ${sortType}`
     return query
   } catch (error) {
     return error
@@ -11,7 +11,7 @@ const getAll = async (sortType) => {
 
 const getById = async (id) => {
   try {
-    const query = await db`SELECT * FROM users where id = ${id}`
+    const query = await db`SELECT * FROM users_blanja where id = ${id}`
     return query
   } catch (error) {
     return error
@@ -21,7 +21,7 @@ const getById = async (id) => {
 const getByEmail = async (email) => {
   try {
     const query =
-      await db`SELECT * FROM users where LOWER(email) = LOWER(${email})`
+      await db`SELECT * FROM users_blanja where LOWER(email) = LOWER(${email})`
     return query
   } catch (error) {
     return error
@@ -30,7 +30,7 @@ const getByEmail = async (email) => {
 
 const create = async (payload) => {
   try {
-    const query = await db`INSERT INTO users ${db(
+    const query = await db`INSERT INTO users_blanja ${db(
       payload,
       "fullname",
       "email",
@@ -44,7 +44,7 @@ const create = async (payload) => {
 
 const update = async (payload, id) => {
   try {
-    const query = await db`UPDATE users SET ${db(
+    const query = await db`UPDATE users_blanja SET ${db(
       payload,
       "fullname",
       "email",
@@ -61,7 +61,7 @@ const update = async (payload, id) => {
 
 const updatePhoto = async (payload, id) => {
   try {
-    const query = await db`UPDATE users set ${db(
+    const query = await db`UPDATE users_blanja set ${db(
       payload,
       "profile_picture"
     )} WHERE id = ${id} returning *`
@@ -73,7 +73,7 @@ const updatePhoto = async (payload, id) => {
 
 const deleteUser = async (id) => {
   try {
-    const query = await db`DELETE FROM users WHERE id = ${id} returning *`
+    const query = await db`DELETE FROM users_blanja WHERE id = ${id} returning *`
     return query
   } catch (error) {
     return error
